@@ -57,7 +57,9 @@ jobs:
           TURNPIN_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew assembleRelease --stacktrace
 
-      # signingConfig は鍵が無いと null にフォールバックするため、署名の有無を必ず機械検証する。
+      # signingConfig は鍵が無いと null にフォールバックし、生成物が
+      # app-release-unsigned.apk になる（＝ここで「ファイルが無い」で落ちる）。
+      # 未署名 APK が Releases に出ないための fail-fast なので、この検証は外さないこと。
       - name: Verify APK signature
         run: |
           set -euo pipefail
