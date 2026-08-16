@@ -45,15 +45,12 @@ class WindowManagerOverlayHandle(
     override fun attach(orientation: Int) {
         check(view == null) { "既に attach 済み。多重 addView になる" }
 
-        val overlayView = View(context).apply {
-            // 戦略 A / C は 0x0 で描画自体が起きないが、B / D は面を持つので
-            // 完全透明を明示する（既定の背景 null に依存しない）。
-            setBackgroundColor(Color.TRANSPARENT)
-        }
+        val overlayView = createOverlayView()
         val layoutParams = createLayoutParams(orientation)
 
         // 例外（BadTokenException など）は握りつぶさず呼び出し側へ透過させる。
         // OrientationController が ApplyResult.Failed に包む。
+        // ここで投げた場合 view は null のままなので、状態は矛盾しない。
         windowManager.addView(overlayView, layoutParams)
 
         view = overlayView
@@ -67,13 +64,38 @@ class WindowManagerOverlayHandle(
         layoutParams.screenOrientation = orientation
 
         if (strategy == OverlayStrategy.C) {
-            // 一部 ROM は updateViewLayout では向きの再評価が走らない。
-            // 同じ View を貼り直すことで確実に反映させる。
-            windowManager.removeView(overlayView)
-            windowManager.addView(overlayView, layoutParams)
+            reattach(overlayView, layoutParams)
         } else {
             windowManager.updateViewLayout(overlayView, layoutParams)
         }
+    }
+
+    /**
+     * 一部 ROM は `updateViewLayout` では向きの再評価が走らないため、貼り直して反映させる
+     * （戦略 C）。
+     *
+     * remove と add の間で状態を一度落としているのは、add が失敗したときに
+     * 「貼っていないのに isAttached が true」という矛盾を残さないため。
+     * そのまま残すと後続の [detach] が既に外れた View を消そうとして例外になる。
+     */
+    private fun reattach(current: View, layoutParams: WindowManager.LayoutParams) {
+        windowManager.removeView(current)
+        view = null
+        params = null
+
+        // 外した View を貼り直すより、新しい View を使うほうが
+        // WindowManager の内部状態（削除待ちキュー）と競合しない。
+        val replacement = createOverlayView()
+        windowManager.addView(replacement, layoutParams)
+
+        view = replacement
+        params = layoutParams
+    }
+
+    private fun createOverlayView(): View = View(context).apply {
+        // 戦略 A / C は 0x0 で描画自体が起きないが、B / D は面を持つので
+        // 完全透明を明示する（既定の背景 null に依存しない）。
+        setBackgroundColor(Color.TRANSPARENT)
     }
 
     override fun detach() {
