@@ -4,10 +4,16 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.hardware.display.DisplayManager
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
+import android.view.Display
 import com.turnpin.R
 import com.turnpin.core.ApplyResult
 import com.turnpin.core.OrientationController
+import com.turnpin.model.OrientationAxis
 import com.turnpin.model.OrientationMode
 import com.turnpin.platform.AndroidPermissionChecker
 import com.turnpin.platform.PrefsSettingsStore
@@ -69,6 +75,19 @@ class TurnPinService : Service() {
     private lateinit var notifications: NotificationFactory
     private lateinit var rotationSync: SystemRotationSync
 
+    /**
+     * 表示状態の変化を拾ってドリフトを検出する（仕様 §4.6）。
+     * ポーリングは使わない。バッテリーを無駄に食ううえ Fire OS で殺されやすい。
+     */
+    private val displayListener = object : DisplayManager.DisplayListener {
+        override fun onDisplayAdded(displayId: Int) = Unit
+        override fun onDisplayRemoved(displayId: Int) = Unit
+        override fun onDisplayChanged(displayId: Int) {
+            if (displayId != Display.DEFAULT_DISPLAY) return
+            reapplyIfDrifted(resources.configuration.orientation)
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
         store = PrefsSettingsStore(this)
@@ -76,6 +95,10 @@ class TurnPinService : Service() {
         controller = OrientationController(overlay, store, AndroidPermissionChecker(this))
         notifications = NotificationFactory(this)
         rotationSync = SystemRotationSync(this)
+
+        // WindowManager の操作はメインスレッド限定なので、コールバックもメインで受ける。
+        getSystemService(DisplayManager::class.java)
+            .registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -84,6 +107,8 @@ class TurnPinService : Service() {
         // startForegroundService から 5 秒以内に startForeground する必要があるため、
         // 権限チェックや適用処理より先に呼ぶ。
         startForeground(NOTIF_ID, notifications.build(controller.currentMode()))
+
+        applyStrategyIfChanged()
 
         return when (intent?.action) {
             ACTION_STOP -> {
@@ -108,8 +133,14 @@ class TurnPinService : Service() {
         }
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        reapplyIfDrifted(newConfig.orientation)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        getSystemService(DisplayManager::class.java).unregisterDisplayListener(displayListener)
         // AC9: プロセスが消えるときにオーバーレイを残さない。
         // store.enabled はここでは書き換えない。OS 都合の停止とユーザーの明示停止を
         // 区別しないと、Fire OS にサービスを殺されただけで設定まで OFF になってしまう。
@@ -152,6 +183,44 @@ class TurnPinService : Service() {
             .putExtra(EXTRA_MODE, controller.currentMode().name)
         if (error != null) intent.putExtra(EXTRA_ERROR, error)
         sendBroadcast(intent)
+    }
+
+    /**
+     * 互換モードが設定画面で変わっていたら、貼り方を切り替えられるよう一度剥がす。
+     * `updateViewLayout` では LayoutParams の組み立て方までは差し替えられないため、
+     * 貼り直しが必要になる。剥がした後の attach は通常の適用経路に任せる。
+     */
+    private fun applyStrategyIfChanged() {
+        val desired = store.overlayStrategy
+        if (overlay.strategy == desired) return
+        overlay.detach()
+        overlay.strategy = desired
+    }
+
+    /**
+     * 相手アプリに向きを奪われていたら貼り直す（仕様 §4.6）。
+     *
+     * 判定には `Configuration.orientation` を使う。`Display.rotation` は端末の
+     * 自然向きからの回転量なので、そこから期待値を組み立てると機種で壊れる。
+     * 上下逆・左右逆までは区別できないが、「横専用アプリに縦を奪われる」という
+     * 実際に困るケースは軸の比較で捕まえられる。
+     */
+    private fun reapplyIfDrifted(configOrientation: Int) {
+        if (!controller.isRunning()) return
+
+        val mode = controller.currentMode()
+        // AUTO / LOCK_CURRENT はどの向きでも食い違いではない。
+        val required = mode.requiredAxis() ?: return
+
+        val actual = when (configOrientation) {
+            Configuration.ORIENTATION_PORTRAIT -> OrientationAxis.PORTRAIT
+            Configuration.ORIENTATION_LANDSCAPE -> OrientationAxis.LANDSCAPE
+            // ORIENTATION_UNDEFINED。判定できないので何もしない。
+            else -> return
+        }
+        if (actual == required) return
+
+        handle(controller.apply(mode))
     }
 
     /** 現在のモードを通知のタイトルへ反映する。 */

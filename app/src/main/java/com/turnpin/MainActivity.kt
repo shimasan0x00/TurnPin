@@ -12,10 +12,12 @@ import android.provider.Settings
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.RadioGroup
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import com.turnpin.model.OrientationMode
+import com.turnpin.model.OverlayStrategy
 import com.turnpin.platform.AndroidPermissionChecker
 import com.turnpin.platform.PrefsSettingsStore
 import com.turnpin.platform.SystemRotationSync
@@ -43,6 +45,7 @@ class MainActivity : Activity() {
     private lateinit var permissionCard: View
     private lateinit var startOnBootCheck: CheckBox
     private lateinit var syncSystemCheck: CheckBox
+    private lateinit var compatGroup: RadioGroup
 
     /** 表示中のモードボタン。選択状態の付け替えに使う。 */
     private val modeButtons = LinkedHashMap<OrientationMode, Button>()
@@ -71,6 +74,7 @@ class MainActivity : Activity() {
         permissionCard = findViewById(R.id.permissionCard)
         startOnBootCheck = findViewById(R.id.startOnBootCheck)
         syncSystemCheck = findViewById(R.id.syncSystemCheck)
+        compatGroup = findViewById(R.id.compatGroup)
 
         setupPermissionCard()
         setupSwitch()
@@ -172,6 +176,20 @@ class MainActivity : Activity() {
                 openWriteSettings()
             }
         }
+
+        compatGroup.setOnCheckedChangeListener { _, checkedId ->
+            val selected = COMPAT_OPTIONS.entries.firstOrNull { it.value == checkedId }?.key
+                ?: return@setOnCheckedChangeListener
+            // syncUi の check() でもこのリスナは発火するので、変化が無ければ何もしない。
+            if (selected == store.overlayStrategy) return@setOnCheckedChangeListener
+
+            store.overlayStrategy = selected
+            // 貼り方そのものが変わるので、適用中なら貼り直す
+            // （updateViewLayout では LayoutParams の作り方までは差し替えられない）。
+            if (store.enabled && permissions.canDrawOverlays()) {
+                TurnPinService.apply(this, store.mode)
+            }
+        }
     }
 
     private fun openWriteSettings() {
@@ -232,9 +250,20 @@ class MainActivity : Activity() {
         startOnBootCheck.isChecked = store.startOnBoot
         // WRITE_SETTINGS も後から取り消せるので、権限と設定の AND を表示する。
         syncSystemCheck.isChecked = store.syncSystemSettings && rotationSync.canSync()
+        COMPAT_OPTIONS[store.overlayStrategy]?.let(compatGroup::check)
     }
 
     private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    private companion object {
+        /** 互換モードと RadioButton の対応。両方向に引けるようここ 1 箇所で定義する。 */
+        val COMPAT_OPTIONS = mapOf(
+            OverlayStrategy.A to R.id.compatA,
+            OverlayStrategy.B to R.id.compatB,
+            OverlayStrategy.C to R.id.compatC,
+            OverlayStrategy.D to R.id.compatD,
+        )
     }
 }

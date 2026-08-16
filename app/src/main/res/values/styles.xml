@@ -117,4 +117,13 @@
         <item name="android:textColor">@color/on_surface</item>
         <item name="android:minHeight">48dp</item>
     </style>
+
+    <!-- 互換モードの選択肢。4 つ横並びなので文字を小さめにして省略を避ける。 -->
+    <style name="Widget.TurnPin.CompatOption" parent="@android:style/Widget.Material.CompoundButton.RadioButton">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:singleLine">true</item>
+    </style>
 </resources>
