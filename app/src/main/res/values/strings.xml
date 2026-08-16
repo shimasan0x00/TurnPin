@@ -43,6 +43,15 @@
     <string name="channel_name">回転制御</string>
     <string name="channel_description">現在の向きの表示と、通知からの切り替え操作に使います。</string>
     <string name="notif_title">TurnPin: %1$s</string>
+    <!--
+      通知のボタンは 7 個が 1 行に並ぶため、モード表示名（mode_*）ではなく
+      短縮ラベルを使う。押したときに適用されるモードは NotificationFactory で対応付ける。
+    -->
     <string name="notif_open">アプリ</string>
+    <string name="notif_portrait">縦</string>
+    <string name="notif_landscape">横</string>
+    <string name="notif_portrait_reverse">縦逆</string>
+    <string name="notif_landscape_reverse">横逆</string>
+    <string name="notif_auto">自動</string>
     <string name="notif_stop">停止</string>
 </resources>

@@ -89,6 +89,28 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <!--
+      通知内のボタン。framework の Button は minWidth 88dp を持っており、
+      7 個並べると入りきらないので打ち消す。色は @color/... ではなく
+      テーマ属性で解決させ、通知シェードの明暗に追従させる。
+    -->
+    <style name="Widget.TurnPin.NotificationButton" parent="@android:style/Widget.Material.Button">
+        <item name="android:background">@drawable/notif_btn_bg</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:paddingStart">2dp</item>
+        <item name="android:paddingEnd">2dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
     <!-- 設定カードのチェックボックス。 -->
     <style name="Widget.TurnPin.CheckBox" parent="@android:style/Widget.Material.CompoundButton.CheckBox">
         <item name="android:textSize">15sp</item>
