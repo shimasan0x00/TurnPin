@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  自動回転とセンサー系。ラベルは方向グリッドと同様 MainActivity が
+  OrientationMode.labelResId から流し込む。表示名が長いので 2 行まで折り返す。
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.TurnPin.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/other_modes_title"
+        android:textAppearance="@style/TextAppearance.TurnPin.CardTitle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnAuto"
+            style="@style/Widget.TurnPin.PillButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:maxLines="2"
+            android:minHeight="@dimen/pill_height"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:singleLine="false" />
+
+        <Button
+            android:id="@+id/btnPortraitSensor"
+            style="@style/Widget.TurnPin.PillButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:maxLines="2"
+            android:minHeight="@dimen/pill_height"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:singleLine="false" />
+
+        <Button
+            android:id="@+id/btnLandscapeSensor"
+            style="@style/Widget.TurnPin.PillButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxLines="2"
+            android:minHeight="@dimen/pill_height"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:singleLine="false" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TurnPin</string>
+    <string name="app_tagline">本体を回さずに画面の向きを固定する</string>
+
+    <!-- 向きモードの表示名。OrientationMode.labelResId から参照する。 -->
+    <string name="mode_auto">自動回転（全方向）</string>
+    <string name="mode_portrait">縦</string>
+    <string name="mode_portrait_reverse">縦（逆）</string>
+    <string name="mode_landscape">横</string>
+    <string name="mode_landscape_reverse">横（逆）</string>
+    <string name="mode_portrait_sensor">縦（上下自動）</string>
+    <string name="mode_landscape_sensor">横（左右自動）</string>
+    <string name="mode_lock_current">今の向きで固定</string>
+
+    <!-- 状態カード -->
+    <string name="status_title">回転制御</string>
+    <string name="status_running">適用中</string>
+    <string name="status_stopped">停止中（OS 標準の挙動）</string>
+
+    <!-- 権限カード -->
+    <string name="permission_title">オーバーレイ権限が必要です</string>
+    <string name="permission_body">他のアプリより上に表示する権限を許可すると、アプリ側が宣言した固定向きを上書きできるようになります。この権限が無いと TurnPin は動作しません。</string>
+    <string name="permission_button">権限を許可</string>
+    <string name="permission_required">オーバーレイ権限が許可されていません</string>
+    <string name="permission_settings_missing">権限設定画面を開けませんでした。OS の設定から「他のアプリの上に表示」を許可してください。</string>
+
+    <!-- 方向グリッド -->
+    <string name="directions_title">向きを選ぶ</string>
+    <string name="directions_caption">制御が停止中でも、押すと自動で開始します。</string>
+
+    <!-- その他モード -->
+    <string name="other_modes_title">その他のモード</string>
+
+    <!-- 適用失敗 -->
+    <string name="apply_failed">向きを適用できませんでした: %1$s</string>
+
+    <!-- 設定 -->
+    <string name="settings_title">設定</string>
+    <string name="setting_start_on_boot">起動時に自動で開始</string>
+    <string name="setting_sync_system">システム設定も同期</string>
+    <string name="setting_sync_system_caption">ロック画面など、オーバーレイが効かない領域での挙動が多少マシになります。OS の「設定を変更」権限が必要です。</string>
+    <string name="write_settings_required">「設定の変更」権限を許可すると同期できます</string>
+    <string name="write_settings_missing">権限設定画面を開けませんでした。OS の設定から「設定の変更」を許可してください。</string>
+
+    <!-- 互換モード（仕様 §2.3 のフォールバック階段） -->
+    <string name="setting_compat_title">互換モード</string>
+    <string name="setting_compat_caption">向きが切り替わらない・他アプリのタッチに影響が出るときは、A から順に試してください。D は全画面を覆うため最終手段です。</string>
+    <string name="compat_a">A 標準</string>
+    <string name="compat_b">B 1px</string>
+    <string name="compat_c">C 貼り直し</string>
+    <string name="compat_d">D 全画面</string>
+
+    <!-- 注意書き（仕様 §11 の要約。README にも同じ内容を載せる） -->
+    <string name="notes_title">既知の制約</string>
+    <string name="notes_body">・ロック画面やシステム UI では効かないことがあります。\n・制御中は、アプリのインストール確認などシステムダイアログのボタンが押せなくなることがあります。その場合は通知の「停止」から復帰してください。\n・横向き専用のアプリを縦に固定すると、レイアウトが崩れることがあります。\n・アプリが向きを奪う瞬間に一瞬ちらつくことがあります。\n・向きが切り替わらない端末では、設定の「互換モード」を順に試してください。</string>
+
+    <!-- 常駐通知 -->
+    <string name="channel_name">回転制御</string>
+    <string name="channel_description">現在の向きの表示と、通知からの切り替え操作に使います。</string>
+    <string name="notif_title">TurnPin: %1$s</string>
+    <!--
+      通知のボタンは 7 個が 1 行に並ぶため、モード表示名（mode_*）ではなく
+      短縮ラベルを使う。押したときに適用されるモードは NotificationFactory で対応付ける。
+    -->
+    <string name="notif_open">アプリ</string>
+    <string name="notif_portrait">縦</string>
+    <string name="notif_landscape">横</string>
+    <string name="notif_portrait_reverse">縦逆</string>
+    <string name="notif_landscape_reverse">横逆</string>
+    <string name="notif_auto">自動</string>
+    <string name="notif_stop">停止</string>
+</resources>

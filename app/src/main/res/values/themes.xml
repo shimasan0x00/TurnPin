@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--
+      外部依存ゼロにするため framework の Material テーマを親にする（API 30 で利用可）。
+      ダーク版は values-night/themes.xml に同名で定義し、親と systemUI のコントラストだけを差し替える。
+    -->
+    <style name="Theme.TurnPin" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/surface</item>
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorAccent">@color/primary</item>
+        <item name="android:colorControlActivated">@color/primary</item>
+        <item name="android:colorControlHighlight">@color/ripple</item>
+        <item name="android:textColorPrimary">@color/on_surface</item>
+        <item name="android:textColorSecondary">@color/on_surface_variant</item>
+
+        <!-- システムバーを背景と同色にして画面全体を一続きに見せる -->
+        <item name="android:statusBarColor">@color/surface</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <!--
+          values-night に実配色を持っているので、システムの強制ダークで二重に暗転させない。
+          API 29+ の属性で minSdk 28 では無視されるだけ（lint の UnusedAttribute は想定内）。
+        -->
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
+    </style>
+</resources>

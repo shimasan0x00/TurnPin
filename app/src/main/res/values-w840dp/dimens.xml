@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fire Max 11 の横持ち相当。コンテンツが横に伸びきらないよう更に内側へ寄せる。 -->
+    <dimen name="content_side_padding">96dp</dimen>
+</resources>

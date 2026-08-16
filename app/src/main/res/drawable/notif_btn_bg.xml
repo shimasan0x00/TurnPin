@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  通知内ボタンの台座。半透明グレーだと通知シェードの地色に溶けて読めなくなったため、
+  不透明のアクセント色で塗り、その上に白文字を載せる。
+  こうするとシェードがライトでもダークでもコントラストが確保できる。
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/notif_chip" />
+    <corners android:radius="8dp" />
+</shape>

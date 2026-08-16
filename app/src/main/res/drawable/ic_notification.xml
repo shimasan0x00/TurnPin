@@ -1,0 +1,19 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="#FFFFFF">
+    <!--
+      通知のスモールアイコン。ステータスバーでは単色シルエットに潰されるため、
+      ランチャーアイコンから細部を落として輪郭だけを残している。
+    -->
+    <path
+        android:pathData="M20,12 A8,8 0 1 1 12,4"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M9.5,0.8 L14.5,4 L9.5,7.2 Z"
+        android:fillColor="#FFFFFF" />
+</vector>

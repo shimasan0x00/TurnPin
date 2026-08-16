@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      content_side_padding は values-w600dp / values-w840dp で上書きし、
+      タブレットの広い画面でコントロールが端から端まで伸びるのを防ぐ。
+    -->
+    <dimen name="content_side_padding">24dp</dimen>
+    <dimen name="content_vertical_padding">24dp</dimen>
+
+    <!-- カード -->
+    <dimen name="card_radius">20dp</dimen>
+    <dimen name="card_padding">20dp</dimen>
+    <dimen name="card_spacing">16dp</dimen>
+    <!-- 夜間は 0dp（values-night/dimens.xml）。暗背景では影が濁るので枠線で表現する。 -->
+    <dimen name="card_elevation">2dp</dimen>
+
+    <!-- 方向グリッドのボタン -->
+    <dimen name="direction_button_height">64dp</dimen>
+    <dimen name="direction_button_radius">16dp</dimen>
+    <!-- 各ボタンの四辺に適用するので、ボタン同士の間隔はこの倍になる。 -->
+    <dimen name="direction_grid_gap">4dp</dimen>
+
+    <!-- ピル型ボタン。2 行に折り返す想定なので高さは最小値として使う。 -->
+    <dimen name="pill_height">52dp</dimen>
+    <dimen name="pill_radius">24dp</dimen>
+</resources>

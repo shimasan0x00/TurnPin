@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  3×3 の十字グリッド（仕様 §4.3）。四隅は Space で空ける。
+
+          [ 縦 ]
+    [横(逆)] [今の向きで固定] [ 横 ]
+          [縦(逆)]
+
+  ボタンのラベルは MainActivity が OrientationMode.labelResId から流し込むので、
+  ここには書かない（表示名の定義を 2 箇所に散らさないため）。
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.TurnPin.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/directions_title"
+        android:textAppearance="@style/TextAppearance.TurnPin.CardTitle" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/directions_caption"
+        android:textAppearance="@style/TextAppearance.TurnPin.Caption" />
+
+    <!-- 上段: 縦 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnPortrait"
+            style="@style/Widget.TurnPin.DirectionButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/direction_button_height"
+            android:layout_margin="@dimen/direction_grid_gap"
+            android:layout_weight="1" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <!-- 中段: 横（逆） / 今の向きで固定 / 横 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnLandscapeReverse"
+            style="@style/Widget.TurnPin.DirectionButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/direction_button_height"
+            android:layout_margin="@dimen/direction_grid_gap"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnLockCurrent"
+            style="@style/Widget.TurnPin.DirectionButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/direction_button_height"
+            android:layout_margin="@dimen/direction_grid_gap"
+            android:layout_weight="1"
+            android:singleLine="false"
+            android:maxLines="2"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btnLandscape"
+            style="@style/Widget.TurnPin.DirectionButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/direction_button_height"
+            android:layout_margin="@dimen/direction_grid_gap"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <!-- 下段: 縦（逆） -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnPortraitReverse"
+            style="@style/Widget.TurnPin.DirectionButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/direction_button_height"
+            android:layout_margin="@dimen/direction_grid_gap"
+            android:layout_weight="1" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,29 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!--
+      「向きを回して固定する」を象ったアイコン。
+      中央のタブレット画面（角丸矩形）を、時計回りの円弧矢印が囲む構成。
+      VectorDrawable は <rect> を持たないため角丸矩形も path で表現している。
+      配置はアダプティブアイコンのセーフゾーン（中央 72x72 = 座標 18〜90）に収まる。
+    -->
+
+    <!-- 回転を表す円弧。右(78,54)から時計回りに 270 度回り、上(54,30)で切れる。 -->
+    <path
+        android:pathData="M78,54 A24,24 0 1 1 54,30"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="6"
+        android:strokeLineCap="round" />
+
+    <!-- 円弧の終端につける矢じり。上端で進行方向（+X）を指す。 -->
+    <path
+        android:pathData="M50,21 L64,30 L50,39 Z"
+        android:fillColor="#FFFFFF" />
+
+    <!-- 固定される対象＝タブレットの画面。縦向きの角丸矩形。 -->
+    <path
+        android:pathData="M47,41 L61,41 A3,3 0 0 1 64,44 L64,64 A3,3 0 0 1 61,67 L47,67 A3,3 0 0 1 44,64 L44,44 A3,3 0 0 1 47,41 Z"
+        android:fillColor="#FFFFFF" />
+</vector>

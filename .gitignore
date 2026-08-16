@@ -27,8 +27,13 @@ render.experimental.xml
 *.jks
 *.keystore
 
+# 署名鍵の情報は絶対にコミットしない（keystore.properties.example は追跡する）
+/keystore.properties
+
 # Google Services (e.g. APIs or Firebase)
 google-services.json
 
 # Android Profiling
 *.hprof
+
+plan/

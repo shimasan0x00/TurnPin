@@ -1,0 +1,95 @@
+name: Build APK
+
+# main への push（PR マージ含む）で最新ビルドを Releases の "latest" に、
+# タグ v* の push でバージョン付き Release を発行する。手動実行も可能。
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write   # Release 作成・アセット添付に必要
+
+# 同一 ref の古い実行はキャンセル（latest リリースの競合回避）
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install SDK packages (android-36 / build-tools 36)
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      # 中核ロジック（OrientationMode / OrientationController）の JVM 単体テスト。
+      # 失敗したら APK を作らずにここで止める。
+      - name: Run unit tests
+        run: |
+          chmod +x ./gradlew
+          ./gradlew test --stacktrace
+
+      - name: Decode keystore
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: printf '%s' "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.jks"
+
+      - name: Build release APK
+        env:
+          TURNPIN_STORE_FILE: ${{ runner.temp }}/release.jks
+          TURNPIN_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          TURNPIN_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          TURNPIN_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleRelease --stacktrace
+
+      # signingConfig は鍵が無いと null にフォールバックし、生成物が
+      # app-release-unsigned.apk になる（＝ここで「ファイルが無い」で落ちる）。
+      # 未署名 APK が Releases に出ないための fail-fast なので、この検証は外さないこと。
+      - name: Verify APK signature
+        run: |
+          set -euo pipefail
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --print-certs \
+            app/build/outputs/apk/release/app-release.apk
+
+      - name: Upload APK as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TurnPin-release-apk
+          path: app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          SRC="app/build/outputs/apk/release/app-release.apk"
+          NOTES="自動ビルドされた release 署名 APK（サイドロード用）。**完全に自己責任**でご利用ください。作者・提供者は一切の責任を負いません。詳細は README を参照。"
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            TAG="${GITHUB_REF_NAME}"
+            cp "$SRC" "TurnPin-${TAG}.apk"
+            gh release create "$TAG" "TurnPin-${TAG}.apk" \
+              --title "TurnPin ${TAG}" --notes "$NOTES"
+          else
+            cp "$SRC" "TurnPin.apk"
+            # 既存 latest を消して現在の commit に貼り直す
+            gh release delete latest --cleanup-tag --yes 2>/dev/null || true
+            gh release create latest "TurnPin.apk" \
+              --title "TurnPin (latest / main)" --notes "$NOTES" \
+              --prerelease --target "${GITHUB_SHA}"
+          fi

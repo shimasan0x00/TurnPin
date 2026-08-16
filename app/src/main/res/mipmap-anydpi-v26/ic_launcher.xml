@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  monochrome は Android 13 以降のテーマ付きアイコン用。前景は白のシルエットなので
+  そのまま単色化できる。
+
+  lint は「minSdk 28 なので -v26 修飾子は不要」と言うが、外すと AAPT2 が
+  mipmap/ic_launcher を解決できずリンクに失敗する（<adaptive-icon> は API 26 の要素で、
+  版修飾子の無いフォルダでは manifest からの参照先として登録されない）。v26 は残すこと。
+-->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="ObsoleteSdkInt">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+    <monochrome android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>
