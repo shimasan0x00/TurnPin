@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ダーク配色。名前は values/colors.xml と 1 対 1 で対応させること
+  （drawable / style は名前だけを参照しているため、ここに漏れがあるとビルドは通るのに
+   ダークモードでだけ配色が破綻する）。
+  ic_launcher_background はランチャー側の見た目なので夜間で変えない＝ここには定義しない。
+-->
+<resources>
+    <!-- 面 -->
+    <color name="surface">#12141C</color>
+    <color name="surface_container">#1C1F2A</color>
+    <color name="outline">#3A3F52</color>
+
+    <!-- 文字 -->
+    <color name="on_surface">#E3E5EF</color>
+    <color name="on_surface_variant">#B6BBCE</color>
+
+    <!-- アクセント -->
+    <color name="primary">#B9C3FF</color>
+    <color name="primary_container">#2E3E86</color>
+    <color name="on_primary_container">#DDE1FF</color>
+    <color name="ripple">#33B9C3FF</color>
+
+    <!-- 未選択のボタン・トラックの台座 -->
+    <color name="track_inactive">#2A2F3E</color>
+
+    <!-- 権限カード・注意書き -->
+    <color name="warning">#FFB68A</color>
+    <color name="warning_container">#4A2612</color>
+</resources>

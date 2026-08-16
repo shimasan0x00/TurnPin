@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 権限カードの面。通常のカードと区別がつくよう暖色の容器色で塗る。 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/warning_container" />
+    <corners android:radius="@dimen/card_radius" />
+</shape>

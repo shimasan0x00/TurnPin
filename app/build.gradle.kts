@@ -66,6 +66,12 @@ android {
         // Play 専用の要件で、lintVitalRelease が release ビルドを致命的エラーで止める。
         // 本アプリの配信先はサイドロードのみで Play には出さない。
         disable += "ExpiredTargetSdkVersion"
+
+        // ObsoleteSdkInt は mipmap-anydpi-v26 に対して「minSdk 28 なので -v26 は不要」と
+        // 言うが、外すと AAPT2 が mipmap/ic_launcher を解決できずリンクに失敗する
+        // （<adaptive-icon> は API 26 の要素で、版修飾子の無いフォルダでは
+        //  manifest からの参照先として登録されない）。実際に確認済み。
+        disable += "ObsoleteSdkInt"
     }
 }
 

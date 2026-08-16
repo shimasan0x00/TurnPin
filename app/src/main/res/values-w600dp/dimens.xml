@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 600dp 以上（タブレット縦持ちなど）はコンテンツを内側に寄せる。 -->
+    <dimen name="content_side_padding">48dp</dimen>
+</resources>

@@ -73,11 +73,21 @@ enum class OrientationMode(
         /** [next] が辿る 4 方向の順序。 */
         private val ROTATION_CYCLE = listOf(PORTRAIT, LANDSCAPE, PORTRAIT_REVERSE, LANDSCAPE_REVERSE)
 
+        /** 保存値が壊れていた / 無かったときに使うモード（仕様 §4.4）。 */
+        val DEFAULT = PORTRAIT
+
         /**
          * `SCREEN_ORIENTATION_*` の値から対応するモードを引く。
          * TurnPin が扱わない値（UNSPECIFIED や USER 系）には `null` を返す。
          */
         fun fromActivityInfo(value: Int): OrientationMode? =
             entries.firstOrNull { it.activityInfo == value }
+
+        /**
+         * 永続化された enum 名から引く。未知の名前・null は [DEFAULT] にフォールバックする。
+         * 保存値が壊れていてもクラッシュさせないため、例外は投げない。
+         */
+        fun fromName(name: String?): OrientationMode =
+            entries.firstOrNull { it.name == name } ?: DEFAULT
     }
 }

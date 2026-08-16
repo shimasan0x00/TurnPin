@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ライト配色のトークン。values-night/colors.xml に「同じ名前で」暗い値を定義してあるため、
+  drawable / style 側は @color/... を参照するだけでダークモードに追従する
+  （drawable を night 用に複製しないための構成）。
+  色相はランチャーアイコン背景 #7C86D8 のインディゴから引いている。
+-->
+<resources>
+    <!-- 面 -->
+    <color name="surface">#F7F8FC</color>
+    <color name="surface_container">#FFFFFF</color>
+    <color name="outline">#DCDFEC</color>
+
+    <!-- 文字 -->
+    <color name="on_surface">#191B24</color>
+    <color name="on_surface_variant">#5B5F72</color>
+
+    <!-- アクセント -->
+    <color name="primary">#4A57C9</color>
+    <color name="primary_container">#DDE1FF</color>
+    <color name="on_primary_container">#00105C</color>
+    <color name="ripple">#1F4A57C9</color>
+
+    <!-- 未選択のボタン・トラックの台座 -->
+    <color name="track_inactive">#E2E5F2</color>
+
+    <!-- 権限カード・注意書き -->
+    <color name="warning">#8B4A1F</color>
+    <color name="warning_container">#FFE6D4</color>
+
+    <!-- ランチャーアイコン用（アイコンの見た目を変えないため夜間でも据え置き） -->
+    <color name="ic_launcher_background">#7C86D8</color>
+</resources>

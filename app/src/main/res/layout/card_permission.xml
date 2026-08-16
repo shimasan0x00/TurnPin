@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  オーバーレイ権限が未許可のときだけ表示する。既定は gone で、
+  MainActivity が onResume ごとに canDrawOverlays を再評価して切り替える
+  （権限は後から取り消されうるため）。
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/permissionCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/warning_surface"
+    android:orientation="vertical"
+    android:padding="@dimen/card_padding"
+    android:visibility="gone">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/permission_title"
+        android:textAppearance="@style/TextAppearance.TurnPin.CardTitle"
+        android:textColor="@color/warning" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/permission_body"
+        android:textAppearance="@style/TextAppearance.TurnPin.Warning" />
+
+    <Button
+        android:id="@+id/permissionButton"
+        style="@style/Widget.TurnPin.PillButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:minHeight="@dimen/pill_height"
+        android:text="@string/permission_button" />
+</LinearLayout>

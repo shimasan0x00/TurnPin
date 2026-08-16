@@ -187,6 +187,43 @@ class OrientationModeTest {
         }
     }
 
+    // ---- fromName（SharedPreferences からの復元） -----------------------------
+
+    @Test
+    fun `fromName は全モードを名前から復元できる`() {
+        // Arrange / Act / Assert
+        OrientationMode.entries.forEach { mode ->
+            assertEquals(mode, OrientationMode.fromName(mode.name))
+        }
+    }
+
+    @Test
+    fun `fromName は未知の名前を既定モードにフォールバックする`() {
+        // Arrange: 旧バージョンの保存値が残っている、などの想定
+        val stale = "DIAGONAL"
+
+        // Act
+        val result = OrientationMode.fromName(stale)
+
+        // Assert
+        assertEquals(OrientationMode.DEFAULT, result)
+    }
+
+    @Test
+    fun `fromName は null を既定モードにフォールバックする`() {
+        // Arrange: 保存値が無い初回起動
+        val result = OrientationMode.fromName(null)
+
+        // Assert
+        assertEquals(OrientationMode.DEFAULT, result)
+    }
+
+    @Test
+    fun `既定モードは縦である`() {
+        // 仕様 §4.4 の mode 既定値。
+        assertEquals(OrientationMode.PORTRAIT, OrientationMode.DEFAULT)
+    }
+
     // ---- requiredAxis（ドリフト再適用の判定用） -------------------------------
 
     @Test

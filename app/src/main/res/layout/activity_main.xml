@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  1 カラム構成。MainActivity 自身も TurnPin のオーバーレイで回されるため、
+  縦・横どちらでもそのまま成立するよう ScrollView に縦積みしている。
+  clipToPadding=false はカードの elevation の影を padding 領域に描かせるため。
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:paddingStart="@dimen/content_side_padding"
+    android:paddingTop="@dimen/content_vertical_padding"
+    android:paddingEnd="@dimen/content_side_padding"
+    android:paddingBottom="@dimen/content_vertical_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/app_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            layout="@layout/card_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/card_spacing" />
+
+        <include
+            layout="@layout/card_permission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/card_spacing" />
+
+        <include
+            layout="@layout/card_directions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/card_spacing" />
+
+        <include
+            layout="@layout/card_other_modes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/card_spacing" />
+
+        <include
+            layout="@layout/card_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/card_spacing" />
+    </LinearLayout>
+</ScrollView>

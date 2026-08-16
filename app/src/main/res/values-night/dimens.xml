@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 暗背景では影がにじんで汚く見えるため、カードは影を消して枠線だけで浮かせる。 -->
+    <dimen name="card_elevation">0dp</dimen>
+</resources>
