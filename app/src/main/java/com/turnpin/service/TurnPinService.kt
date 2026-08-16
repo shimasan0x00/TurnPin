@@ -11,6 +11,7 @@ import com.turnpin.core.OrientationController
 import com.turnpin.model.OrientationMode
 import com.turnpin.platform.AndroidPermissionChecker
 import com.turnpin.platform.PrefsSettingsStore
+import com.turnpin.platform.SystemRotationSync
 import com.turnpin.platform.WindowManagerOverlayHandle
 
 /**
@@ -66,6 +67,7 @@ class TurnPinService : Service() {
     private lateinit var store: PrefsSettingsStore
     private lateinit var controller: OrientationController
     private lateinit var notifications: NotificationFactory
+    private lateinit var rotationSync: SystemRotationSync
 
     override fun onCreate() {
         super.onCreate()
@@ -73,6 +75,7 @@ class TurnPinService : Service() {
         overlay = WindowManagerOverlayHandle(this, store.overlayStrategy)
         controller = OrientationController(overlay, store, AndroidPermissionChecker(this))
         notifications = NotificationFactory(this)
+        rotationSync = SystemRotationSync(this)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -118,6 +121,8 @@ class TurnPinService : Service() {
         when (result) {
             ApplyResult.Success -> {
                 if (controller.isRunning()) {
+                    // §2.4 の補助機能。既定 OFF で、権限が無ければ黙ってスキップされる。
+                    if (store.syncSystemSettings) rotationSync.apply(controller.currentMode())
                     updateNotification()
                     broadcastState(error = null)
                 } else {

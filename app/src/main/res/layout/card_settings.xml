@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 永続設定（仕様 §4.4）。互換モードの選択は Phase 7 でここに足す。 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.TurnPin.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_title"
+        android:textAppearance="@style/TextAppearance.TurnPin.CardTitle" />
+
+    <CheckBox
+        android:id="@+id/startOnBootCheck"
+        style="@style/Widget.TurnPin.CheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/setting_start_on_boot" />
+
+    <CheckBox
+        android:id="@+id/syncSystemCheck"
+        style="@style/Widget.TurnPin.CheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/setting_sync_system" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="34dp"
+        android:text="@string/setting_sync_system_caption"
+        android:textAppearance="@style/TextAppearance.TurnPin.Caption" />
+</LinearLayout>

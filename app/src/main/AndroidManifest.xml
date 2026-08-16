@@ -49,5 +49,17 @@
         <service
             android:name=".service.TurnPinService"
             android:exported="false" />
+
+        <!--
+          BOOT_COMPLETED はシステムからの明示ブロードキャストなので exported が必要。
+          受信側で start_on_boot / enabled / オーバーレイ権限をすべて確認してから起動する。
+        -->
+        <receiver
+            android:name=".service.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

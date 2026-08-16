@@ -11,12 +11,14 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import com.turnpin.model.OrientationMode
 import com.turnpin.platform.AndroidPermissionChecker
 import com.turnpin.platform.PrefsSettingsStore
+import com.turnpin.platform.SystemRotationSync
 import com.turnpin.service.TurnPinService
 
 /**
@@ -33,11 +35,14 @@ class MainActivity : Activity() {
 
     private lateinit var store: PrefsSettingsStore
     private lateinit var permissions: AndroidPermissionChecker
+    private lateinit var rotationSync: SystemRotationSync
 
     private lateinit var enabledSwitch: Switch
     private lateinit var currentModeText: TextView
     private lateinit var statusText: TextView
     private lateinit var permissionCard: View
+    private lateinit var startOnBootCheck: CheckBox
+    private lateinit var syncSystemCheck: CheckBox
 
     /** 表示中のモードボタン。選択状態の付け替えに使う。 */
     private val modeButtons = LinkedHashMap<OrientationMode, Button>()
@@ -58,15 +63,19 @@ class MainActivity : Activity() {
 
         store = PrefsSettingsStore(this)
         permissions = AndroidPermissionChecker(this)
+        rotationSync = SystemRotationSync(this)
 
         enabledSwitch = findViewById(R.id.enabledSwitch)
         currentModeText = findViewById(R.id.currentModeText)
         statusText = findViewById(R.id.statusText)
         permissionCard = findViewById(R.id.permissionCard)
+        startOnBootCheck = findViewById(R.id.startOnBootCheck)
+        syncSystemCheck = findViewById(R.id.syncSystemCheck)
 
         setupPermissionCard()
         setupSwitch()
         setupModeButtons()
+        setupSettings()
     }
 
     override fun onResume() {
@@ -143,6 +152,41 @@ class MainActivity : Activity() {
         bindModeButton(R.id.btnLandscapeSensor, OrientationMode.LANDSCAPE_SENSOR)
     }
 
+    private fun setupSettings() {
+        startOnBootCheck.setOnClickListener {
+            store.startOnBoot = startOnBootCheck.isChecked
+        }
+
+        syncSystemCheck.setOnClickListener {
+            if (!syncSystemCheck.isChecked) {
+                store.syncSystemSettings = false
+                return@setOnClickListener
+            }
+            // WRITE_SETTINGS は別途ユーザーの許可が要る。未許可なら設定画面へ送り、
+            // チェックは戻しておく（許可されたかは onResume の syncUi で反映される）。
+            if (rotationSync.canSync()) {
+                store.syncSystemSettings = true
+            } else {
+                syncSystemCheck.isChecked = false
+                showMessage(getString(R.string.write_settings_required))
+                openWriteSettings()
+            }
+        }
+    }
+
+    private fun openWriteSettings() {
+        val intent = Intent(
+            Settings.ACTION_MANAGE_WRITE_SETTINGS,
+            Uri.parse("package:$packageName")
+        )
+        try {
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            // 一部の ROM はこの画面を持たない。手動で辿ってもらう案内を出す。
+            showMessage(getString(R.string.write_settings_missing))
+        }
+    }
+
     /** ラベルは [OrientationMode.labelResId] から流し込む（表示名の定義を散らさない）。 */
     private fun bindModeButton(viewId: Int, mode: OrientationMode) {
         val button = findViewById<Button>(viewId)
@@ -184,6 +228,10 @@ class MainActivity : Activity() {
         modeButtons.forEach { (candidate, button) ->
             button.isSelected = candidate == mode
         }
+
+        startOnBootCheck.isChecked = store.startOnBoot
+        // WRITE_SETTINGS も後から取り消せるので、権限と設定の AND を表示する。
+        syncSystemCheck.isChecked = store.syncSystemSettings && rotationSync.canSync()
     }
 
     private fun showMessage(message: String) {
