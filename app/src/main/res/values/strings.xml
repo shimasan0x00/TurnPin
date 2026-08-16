@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TurnPin</string>
+
+    <!-- 向きモードの表示名。OrientationMode.labelResId から参照する。 -->
+    <string name="mode_auto">自動回転（全方向）</string>
+    <string name="mode_portrait">縦</string>
+    <string name="mode_portrait_reverse">縦（逆）</string>
+    <string name="mode_landscape">横</string>
+    <string name="mode_landscape_reverse">横（逆）</string>
+    <string name="mode_portrait_sensor">縦（上下自動）</string>
+    <string name="mode_landscape_sensor">横（左右自動）</string>
+    <string name="mode_lock_current">今の向きで固定</string>
 </resources>
