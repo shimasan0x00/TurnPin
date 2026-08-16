@@ -3,7 +3,12 @@
 **Android タブレットの画面の向きを、本体を回さずにアプリ内の操作だけで切り替え・固定する小さな補助アプリ** — Amazon Fire Max 11 (Fire OS 8) 向け
 
 <p align="center">
-  <img src=".readme/turnpin_sample.png" alt="TurnPin の画面: 「縦」を適用中の状態カードと 3×3 の方向グリッド" width="480">
+  <img src=".readme/turnpin_landscape.png" alt="横向きの TurnPin: 「横」を適用中で、方向グリッドの「横」が選択状態" width="620">
+  &nbsp;
+  <img src=".readme/turnpin_sample.png" alt="縦向きの TurnPin: 「縦」を適用中で、状態カード・方向グリッド・設定・既知の制約まで表示" width="223">
+</p>
+<p align="center">
+  <sub>同じ画面を <b>横</b>（左）と <b>縦</b>（右）で表示したところ。端末は動かさず、アプリ内のボタンだけで切り替えています。</sub>
 </p>
 
 タブレットで「画面の自動回転オフ」にしていても、`android:screenOrientation` を宣言しているアプリを起動すると向きが強制的に変わってしまいます。そして一度そうなると、**本体を物理的に回さない限り向きを戻せません**。寝転がって使うときやスタンドに固定しているときには、これが致命的に不便です。さらに OS 標準機能では「上下逆さまの縦」に切り替えることがそもそもできません。
