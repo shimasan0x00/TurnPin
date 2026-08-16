@@ -30,8 +30,33 @@ internal class NotificationFactory(private val context: Context) {
     fun build(mode: OrientationMode): Notification {
         ensureChannel()
 
-        val title = context.getString(R.string.notif_title, context.getString(mode.labelResId))
-        val content = RemoteViews(context.packageName, R.layout.notification_control).apply {
+        val modeLabel = context.getString(mode.labelResId)
+        val title = context.getString(R.string.notif_title, modeLabel)
+
+        return Notification.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification)
+            // カスタムビューを描けない表示先（一部のランチャーや車載など）向けの控え。
+            .setContentTitle(title)
+            // 折りたたみ時は高さも幅も厳しいので 1 行版を使い、
+            // 見出しはモード名だけにする（アプリ名は通知ヘッダーが既に出している）。
+            .setCustomContentView(buildViews(R.layout.notification_control, modeLabel))
+            // 展開時は余裕があるので 2 行版＋「TurnPin: <モード>」のフル表記。
+            .setCustomBigContentView(buildViews(R.layout.notification_control_big, title))
+            .setStyle(Notification.DecoratedCustomViewStyle())
+            .setContentIntent(openAppIntent())
+            .setOngoing(true)
+            .build()
+    }
+
+    /**
+     * 折りたたみ版・展開版に共通の設定を流し込む。
+     *
+     * 折りたたみ版には [R.id.notifOpen] が無いが、`RemoteViews` の
+     * `setOnClickPendingIntent` は存在しない id を黙って無視するので分岐は要らない
+     * （通知本体のタップでもアプリは開ける）。
+     */
+    private fun buildViews(layoutId: Int, title: String): RemoteViews =
+        RemoteViews(context.packageName, layoutId).apply {
             setTextViewText(R.id.notifTitle, title)
 
             setOnClickPendingIntent(R.id.notifOpen, openAppIntent())
@@ -46,17 +71,6 @@ internal class NotificationFactory(private val context: Context) {
             setOnClickPendingIntent(R.id.notifAuto, applyIntent(OrientationMode.AUTO))
             setOnClickPendingIntent(R.id.notifStop, stopIntent())
         }
-
-        return Notification.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification)
-            // カスタムビューを描けない表示先（一部のランチャーや車載など）向けの控え。
-            .setContentTitle(title)
-            .setCustomContentView(content)
-            .setStyle(Notification.DecoratedCustomViewStyle())
-            .setContentIntent(openAppIntent())
-            .setOngoing(true)
-            .build()
-    }
 
     private fun ensureChannel() {
         val manager = context.getSystemService(NotificationManager::class.java)

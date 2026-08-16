@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  「停止」だけは他と見分けがつくよう暖色にする。オーバーレイが原因で他アプリの
-  ボタンが押せなくなったとき（仕様 §11-2）、ここが唯一の復帰手段になるため。
+  「停止」だけは他と見分けがつくよう赤にする。オーバーレイが原因で
+  他アプリのボタンが押せなくなったとき（仕様 §11-2）、ここが唯一の復帰手段になるため。
 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="#33D9534F" />
+    <solid android:color="@color/notif_chip_stop" />
     <corners android:radius="8dp" />
 </shape>

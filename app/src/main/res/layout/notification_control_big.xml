@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  常駐通知の**展開時**の中身。折りたたみ時（notification_control.xml）と違って
+  高さに余裕があるので、タイトルを独立した行にし、[アプリ] も並べる。
+
+  [TurnPin: 縦]
+  [アプリ] [縦] [横] [縦逆] [横逆] [自動] [停止]
+
+  id は折りたたみ版と共有しているものがある（notifTitle など）。
+  NotificationFactory は両方の RemoteViews に同じ設定を流し込む。
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="12dp"
+    android:paddingTop="4dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:id="@+id/notifTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/notif_text"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <!-- ButtonStyle を無効にする理由は notification_control.xml のコメントを参照。 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        tools:ignore="ButtonStyle">
+
+        <Button
+            android:id="@+id/notifOpen"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1.4"
+            android:background="@drawable/notif_btn_bg"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:singleLine="true"
+            android:stateListAnimator="@null"
+            android:text="@string/notif_open"
+            android:textAllCaps="false"
+            android:textColor="@color/notif_chip_text"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/notifPortrait"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/notif_btn_bg"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:singleLine="true"
+            android:stateListAnimator="@null"
+            android:text="@string/notif_portrait"
+            android:textAllCaps="false"
+            android:textColor="@color/notif_chip_text"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/notifLandscape"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/notif_btn_bg"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:singleLine="true"
+            android:stateListAnimator="@null"
+            android:text="@string/notif_landscape"
+            android:textAllCaps="false"
+            android:textColor="@color/notif_chip_text"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/notifPortraitReverse"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1.3"
+            android:background="@drawable/notif_btn_bg"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:singleLine="true"
+            android:stateListAnimator="@null"
+            android:text="@string/notif_portrait_reverse"
+            android:textAllCaps="false"
+            android:textColor="@color/notif_chip_text"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/notifLandscapeReverse"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1.3"
+            android:background="@drawable/notif_btn_bg"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:singleLine="true"
+            android:stateListAnimator="@null"
+            android:text="@string/notif_landscape_reverse"
+            android:textAllCaps="false"
+            android:textColor="@color/notif_chip_text"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/notifAuto"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1.3"
+            android:background="@drawable/notif_btn_bg"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:singleLine="true"
+            android:stateListAnimator="@null"
+            android:text="@string/notif_auto"
+            android:textAllCaps="false"
+            android:textColor="@color/notif_chip_text"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/notifStop"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1.3"
+            android:background="@drawable/notif_btn_stop_bg"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:singleLine="true"
+            android:stateListAnimator="@null"
+            android:text="@string/notif_stop"
+            android:textAllCaps="false"
+            android:textColor="@color/notif_chip_text"
+            android:textSize="12sp" />
+    </LinearLayout>
+</LinearLayout>

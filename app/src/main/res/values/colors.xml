@@ -28,6 +28,22 @@
     <color name="warning">#8B4A1F</color>
     <color name="warning_container">#FFE6D4</color>
 
+    <!--
+      通知内の文字色。実機（Fire OS 8）では RemoteViews の
+      ?android:attr/textColorPrimary が通知シェードの明暗に追従せず、
+      暗いシェードの上に黒文字が出て読めなくなった。テーマ属性に頼らず、
+      values / values-night で明示的に切り替える。
+    -->
+    <color name="notif_text">#1B1B1F</color>
+
+    <!--
+      通知内ボタンの台座。こちらは不透明なので、シェードがライトでもダークでも
+      白文字が読める。＝シェースの明暗に依存しない（night 側でも同じ値を使う）。
+    -->
+    <color name="notif_chip">#4A57C9</color>
+    <color name="notif_chip_stop">#B3261E</color>
+    <color name="notif_chip_text">#FFFFFF</color>
+
     <!-- ランチャーアイコン用（アイコンの見た目を変えないため夜間でも据え置き） -->
     <color name="ic_launcher_background">#7C86D8</color>
 </resources>

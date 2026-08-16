@@ -27,4 +27,7 @@
     <!-- 権限カード・注意書き -->
     <color name="warning">#FFB68A</color>
     <color name="warning_container">#4A2612</color>
+
+    <!-- 通知の文字色（暗いシェード用）。chip 系は不透明なので night では変えない。 -->
+    <color name="notif_text">#E6E6EA</color>
 </resources>
