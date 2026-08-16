@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- AGP 9 では package 属性は書かず、namespace（app/build.gradle.kts）で解決する。 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      本アプリの中核。install 時には付与されず、Settings.canDrawOverlays で判定して
+      ACTION_MANAGE_OVERLAY_PERMISSION へ誘導する。
+    -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- 他アプリ使用中もオーバーレイを維持するための前面サービス -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- start_on_boot による再起動後の復帰 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!--
+      オプション機能（§2.4）用。ロック画面などオーバーレイが効かない領域向けの補助で、
+      未許可でも本体機能は動く。Settings.System.canWrite で判定しサイレントにスキップする。
+    -->
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!--
+      targetSdk 30 のため POST_NOTIFICATIONS（33+）と foregroundServiceType（34+）は不要。
+      宣言しないこと。
+    -->
 
     <application
         android:allowBackup="true"
